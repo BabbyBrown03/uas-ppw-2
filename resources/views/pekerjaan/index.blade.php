@@ -28,6 +28,7 @@
                 </form>
             </div>
             <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <div class="mt-4">{{ $data->links() }}</div>
                 <table class="min-w-full divide-y divide-x divide-gray-200 text-sm">
                     <thead class="bg-gray-100">
                     <tr>
@@ -41,10 +42,10 @@
                     <tbody class="divide-y divide-gray-100 bg-white">
                         @forelse($data as $k => $d)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $k+1 }}</td>
+                            <td class="px-4 py-3">{{ $data->firstItem() + $k }}</td>
                             <td class="px-4 py-3 font-medium text-gray-900">{{ $d->nama }}</td>
                             <td class="px-4 py-3 text-gray-600">{{ $d->deskripsi }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ 100 }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ $d->pegawai_count }}</td>
                             <td class="px-4 py-3 text-center text-gray-600">
                                 <div class="inline-flex rounded-md shadow-sm" role="group">
                                     <a href="{{ route('pekerjaan.edit', ['id' => $d->id]) }}" class="cursor-pointer rounded-l-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-50">

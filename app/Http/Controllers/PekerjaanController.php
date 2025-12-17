@@ -11,9 +11,13 @@ class PekerjaanController extends Controller
 {
     public function index(Request $request) {
         $keyword = $request->get('keyword');
-        $data = Pekerjaan::when($keyword, function ($query) use ($keyword) {
-            $query->where('nama', 'like', "%{$keyword}%")->orWhere('deskripsi', 'like', "%{$keyword}%");
-        })->get();
+        $data = Pekerjaan::withCount('pegawai')
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('nama', 'like', "%{$keyword}%")
+                ->orWhere('deskripsi', 'like', "%{$keyword}%");
+            })
+            ->paginate(5)
+            ->withQueryString();
         return view('pekerjaan.index', compact('data'));
     }
 
@@ -27,8 +31,11 @@ class PekerjaanController extends Controller
             'deskripsi' => 'required|string',
         ]);
 
-        if ($validator->fails()) return redirect()->back()->with($validator->errors()->all());
-
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $data = new Pekerjaan();
         $data->nama = $request->nama;
         $data->deskripsi = $request->deskripsi;
@@ -51,8 +58,11 @@ class PekerjaanController extends Controller
             'deskripsi' => 'required|string',
         ]);
 
-        if ($validator->fails()) return redirect()->back()->with($validator->errors()->all());
-
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $data = Pekerjaan::findOrFail($request->id);
 
         $data->nama = $request->nama;
@@ -61,7 +71,7 @@ class PekerjaanController extends Controller
         if ($data->save()) {
             return redirect()->route('pekerjaan.index')->with('success', 'Data tersimpan');
         } else {
-            return redirect()->route('pekerjaan.index')->with('success', 'Data tidak tersimpan');
+            return redirect()->route('pekerjaan.index')->with('error', 'Data tidak tersimpan');
         }
     }
 

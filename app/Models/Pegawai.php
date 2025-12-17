@@ -8,8 +8,16 @@ class Pegawai extends Model
 {
     protected $table = 'pegawai';
 
-    public function pegawai()
+    protected $fillable = [
+        'pekerjaan_id',
+        'nama',
+        'email',
+        'gender',
+        'is_active'
+    ];
+
+    public function pekerjaan()
     {
-        return $this->hasOne(Pekerjaan::class);
+        return $this->belongsTo(Pekerjaan::class);
     }
 }
