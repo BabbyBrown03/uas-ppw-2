@@ -5,6 +5,17 @@
     <section class="p-4 bg-white rounded-lg min-h-[50vh]">
         <h1 class="text-3xl font-bold text-[#C0392B] mb-6 text-center">Pekerjaan</h1>
         <div class="mx-auto max-w-screen-xl">
+            @if (session('success'))
+    <div class="mb-4 rounded-lg bg-green-100 p-4 text-green-800">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-800">
+        {{ session('error') }}
+    </div>
+@endif
             <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <a href="{{ route('pekerjaan.add') }}" class="rounded-md bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700">
                     Tambah Data
